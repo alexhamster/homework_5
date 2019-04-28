@@ -95,6 +95,11 @@ public:
 
     }
 
+    size_t get_size()
+    {
+        return _matrix_data->size();
+    }
+
     Iterator& operator[] (int x)
     {
         _input_buf[Buf::x] = x;

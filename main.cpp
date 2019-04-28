@@ -10,9 +10,11 @@ int main()
     std::cout << m[10][10] << std::endl;
     m[10][10] = 10;
     m[10][11] = 20;
+    std::cout << m[10][10] << std::endl;
     std::cout << m[10][11] << std::endl;
-
-
+    m[10][11] = 453534;
+    std::cout << m[10][11] << std::endl;
+    std::cout << m[11][12] << std::endl;
 
     std::cout << "Hello, World!" << std::endl;
     return 0;
