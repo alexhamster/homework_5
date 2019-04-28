@@ -47,12 +47,11 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
 
     BOOST_AUTO_TEST_CASE(correct_matrix_size_0)
     {
-        Matrix<int, 0> m;
+        Matrix<int, -1> m;
         const size_t range = 25;
         for(size_t i = 0; i < range; i++)
             m[i][i] = 3*i;
 
-        m[0][0]; // need to trigger transfer from buffer to matrix
         BOOST_CHECK(m.get_size() == range);
     }
 
@@ -64,9 +63,8 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
             m[i][i] = 3*i;
 
         for(size_t i = 0; i < range; i++)
-            m[i][i] = 0;
+            m[i][i] = -1;
 
-        m[0][0]; // need to trigger transfer from buffer to matrix
         BOOST_CHECK(m.get_size() == 0);
     }
 

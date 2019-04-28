@@ -8,7 +8,7 @@
 using map_key = std::tuple<int, int>;
 
 
-template <typename T = int>
+template <typename T>
 struct Buff
 {
     int x = -1;
@@ -27,11 +27,11 @@ private:
 
     public:
 
-        Buff<T>* _data_buf;
-        Buff<>* _input_buf;
+        std::shared_ptr<Buff<T>> _data_buf;
+        std::shared_ptr<Buff<T>> _input_buf;
         std::map<map_key, T>* _map;
 
-        Iterator(Buff<T>* data_buf_, Buff<>* input_buf_, std::map<map_key, T>* map_) :
+        Iterator(std::shared_ptr<Buff<T>> data_buf_, std::shared_ptr<Buff<T>> input_buf_, std::map<map_key, T>* map_) :
         _data_buf(data_buf_),
         _input_buf(input_buf_),
         _map(map_) {}
@@ -45,9 +45,9 @@ private:
 
     void flush_data_buf(); // need to trigger movement from data_buf to matrix_data
 
-    std::unique_ptr<Buff<>> _input_buf = nullptr;
+    std::shared_ptr<Buff<T>> _input_buf = nullptr;
 
-    std::unique_ptr<Buff<T>> _data_buf = nullptr;
+    std::shared_ptr<Buff<T>> _data_buf = nullptr;
 
     std::unique_ptr<Iterator> _iterator = nullptr;
 
@@ -67,8 +67,9 @@ public:
 
     Matrix& operator=(Matrix&& other) noexcept;
 
-    size_t get_size() const
+    size_t get_size()
     {
+        flush_data_buf();
         return _matrix_data->size();
     }
 

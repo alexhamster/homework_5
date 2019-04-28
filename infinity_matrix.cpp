@@ -43,9 +43,9 @@ template <typename T, int U>
 void Matrix<T, U>::do_init()
 {
     _data_buf = std::make_unique<Buff<T>>();
-    _input_buf = std::make_unique<Buff<>>();
+    _input_buf = std::make_unique<Buff<T>>();
     _matrix_data = std::make_unique<std::map<map_key, T>>();
-    _iterator  = std::make_unique<Iterator>(_data_buf.get(), _input_buf.get(), _matrix_data.get());
+    _iterator  = std::make_unique<Iterator>(_data_buf, _input_buf, _matrix_data.get());
 }
 
 template <typename T, int U>
@@ -61,7 +61,7 @@ Matrix<T, U>::Matrix(Matrix<T, U>& other)
 {
     do_init();
     std::memcpy(_data_buf.get(), other._data_buf.get(), sizeof(Buff<T>));
-    std::memcpy(_input_buf.get(), other._input_buf.get(), sizeof(Buff<>));
+    std::memcpy(_input_buf.get(), other._input_buf.get(), sizeof(Buff<T>));
     _matrix_data->insert(other._matrix_data->begin(), other._matrix_data->end());
 }
 template <typename T, int U>
@@ -69,7 +69,7 @@ Matrix<T, U> &Matrix<T, U>::operator=(Matrix<T, U> &other)
 {
     do_init();
     std::memcpy(_data_buf.get(), other._data_buf.get(), sizeof(Buff<T>));
-    std::memcpy(_input_buf.get(), other._input_buf.get(), sizeof(Buff<>));
+    std::memcpy(_input_buf.get(), other._input_buf.get(), sizeof(Buff<T>));
     _matrix_data->insert(other._matrix_data->begin(), other._matrix_data->end());
     return *this;
 }
