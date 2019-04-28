@@ -1,6 +1,6 @@
 #define BOOST_TEST_MODULE test_module
 #include <boost/test/unit_test.hpp>
-#include "infinity_matrix.h"
+#include "infinity_matrix.cpp"
 
 #define MATRIX_DEFAULT_VALUE -1
 
@@ -66,7 +66,5 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
         m[0][0]; // need to trigger transfer from buffer to matrix
         BOOST_CHECK(m.get_size() == range);
     }
-
-
 
 BOOST_AUTO_TEST_SUITE_END()

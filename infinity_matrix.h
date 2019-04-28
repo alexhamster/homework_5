@@ -4,6 +4,8 @@
 #include <map>
 #include <iostream>
 #include <memory>
+#include <cstring>
+
 
 #define MATRIX_DEFAULT_VALUE -1
 
@@ -39,71 +41,36 @@ private:
         _input_buf(input_buf_),
         _map(map_) {}
 
-        int& operator[](int y)
-        {
-            _input_buf[Buf::y] = y;
+        int& operator[](int y);
 
-            if(_data_buf[Buf::value] != MATRIX_DEFAULT_VALUE)
-            {
-                _map->operator[](std::make_tuple(
-                        _data_buf[Buf::x],
-                        _data_buf[Buf::y])) = _data_buf[Buf::value];
-            }
-            else
-            {
-                auto f_result = _map->find(std::make_tuple(
-                        _data_buf[Buf::x],_data_buf[Buf::y]));
-                if(f_result != _map->end())
-                    _map->erase(f_result);
-            }
-
-            auto find_result = _map->find(std::make_tuple(
-                    _input_buf[Buf::x],_input_buf[Buf::y]));
-
-            if(find_result == _map->end())
-                _data_buf[Buf::value] = MATRIX_DEFAULT_VALUE;
-            else
-                _data_buf[Buf::value] = find_result->second;
-
-            _data_buf[Buf::x] = _input_buf[Buf::x];
-            _data_buf[Buf::y] = _input_buf[Buf::y];
-
-            return _data_buf[Buf::value];
-        }
     };
+
+    void do_init();
 
     std::unique_ptr<int[]> _input_buf;
 
-    std::unique_ptr<int[]> _matrix_buf;
+    std::unique_ptr<int[]> _data_buf;
 
 public:
 
+    Matrix();
 
-    Matrix() // todo add constructors &&
-    {
-        _matrix_buf = std::make_unique<int[]>(3); //todo change to std::array
+    Matrix(Matrix& other);
 
-        _matrix_buf[0] = -1;
-        _matrix_buf[1] = -1;
-        _matrix_buf[2] = -1;
+    Matrix& operator= (Matrix& other);
 
-        _input_buf = std::make_unique<int[]>(2);
+    Matrix(Matrix&& other) noexcept;
 
-        _matrix_data = std::make_unique<std::map<map_key, int>>();
+    Matrix& operator=(Matrix&& other) noexcept;
 
-        _iterator  = std::make_unique<Iterator>(_matrix_buf.get(), _input_buf.get(), _matrix_data.get());
+    void do_move(Matrix &&other) noexcept;
 
-    }
 
-    size_t get_size()
+    size_t get_size() const
     {
         return _matrix_data->size();
     }
 
-    Iterator& operator[] (int x)
-    {
-        _input_buf[Buf::x] = x;
-        return *_iterator;
-    }
-
+    Iterator& operator[] (int x);
 };
+

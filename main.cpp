@@ -1,20 +1,24 @@
 #include <iostream>
-#include "infinity_matrix.h"
 #include <vector>
 
+
+#include "infinity_matrix.h"
 int main()
 {
 
     Matrix m;
 
-    std::cout << m[10][10] << std::endl;
     m[10][10] = 10;
     m[10][11] = 20;
-    std::cout << m[10][10] << std::endl;
-    std::cout << m[10][11] << std::endl;
-    m[10][11] = 453534;
-    std::cout << m[10][11] << std::endl;
-    std::cout << m[11][12] << std::endl;
+
+    Matrix m2;
+    m2 = m;
+    std::cout << m2[10][10] << std::endl;
+    std::cout << m2[10][11] << std::endl;
+
+    m[10][11] = 1000000;
+
+    std::cout << m2[10][11] << std::endl;
 
     std::cout << "Hello, World!" << std::endl;
     return 0;
