@@ -1,16 +1,13 @@
-//
-// Created by alex on 26.04.2019.
-//
 
-#include "infinity_matrix.h"
-
-Matrix::Iterator& Matrix::operator[] (int x)
+template <typename T, int U>
+typename Matrix<T, U>::Iterator&  Matrix<T, U>::operator[] (int x)
 {
     _input_buf[Buf::x] = x;
     return *_iterator;
 }
 
-int& Matrix::Iterator::operator[](int y)
+template <typename T, int U>
+int& Matrix<T, U>::Iterator::operator[](int y)
 {
     _input_buf[Buf::y] = y;
 
@@ -42,7 +39,8 @@ int& Matrix::Iterator::operator[](int y)
     return _data_buf[Buf::value];
 }
 
-void Matrix::do_init()
+template <typename T, int U>
+void Matrix<T, U>::do_init()
 {
     _data_buf = std::make_unique<int[]>(3);
     _input_buf = std::make_unique<int[]>(2);
@@ -50,37 +48,38 @@ void Matrix::do_init()
     _iterator  = std::make_unique<Iterator>(_data_buf.get(), _input_buf.get(), _matrix_data.get());
 }
 
-Matrix::Matrix()
+template <typename T, int U>
+Matrix<T, U>::Matrix()
 {
     do_init();
     _data_buf[Buf::value] = MATRIX_DEFAULT_VALUE;
     _data_buf[Buf::x] = MATRIX_DEFAULT_VALUE;
     _data_buf[Buf::y] = MATRIX_DEFAULT_VALUE;
 }
-
-Matrix::Matrix(Matrix& other)
+template <typename T, int U>
+Matrix<T, U>::Matrix(Matrix<T, U>& other)
 {
     do_init();
-    std::memcpy(_data_buf.get(), other._data_buf.get(), sizeof(int) * 3);
+    std::memcpy(_data_buf.get(), other._data_buf.get(), sizeof(Buff<T>));
     std::memcpy(_input_buf.get(), other._input_buf.get(), sizeof(int) * 2);
     _matrix_data->insert(other._matrix_data->begin(), other._matrix_data->end());
 }
-
-Matrix &Matrix::operator=(Matrix &other)
+template <typename T, int U>
+Matrix<T, U> &Matrix<T, U>::operator=(Matrix<T, U> &other)
 {
     do_init();
-    std::memcpy(_data_buf.get(), other._data_buf.get(), sizeof(int) * 3);
+    std::memcpy(_data_buf.get(), other._data_buf.get(), sizeof(Buff<T>));
     std::memcpy(_input_buf.get(), other._input_buf.get(), sizeof(int) * 2);
     _matrix_data->insert(other._matrix_data->begin(), other._matrix_data->end());
     return *this;
 }
-
-void Matrix::flush_data_buf()
+template <typename T, int U>
+void Matrix<T, U>::flush_data_buf()
 {
     operator[](0).operator[](0);
 }
-
-void Matrix::do_move(Matrix &&other) noexcept
+template <typename T, int U>
+void Matrix<T, U>::do_move(Matrix<T, U> &&other) noexcept
 {
     std::swap(_matrix_data, other._matrix_data);
     std::swap(_data_buf, other._data_buf);
@@ -89,18 +88,21 @@ void Matrix::do_move(Matrix &&other) noexcept
     other.~Matrix();
 }
 
-Matrix::Matrix(Matrix&& other) noexcept
+template <typename T, int U>
+Matrix<T, U>::Matrix(Matrix<T, U>&& other) noexcept
 {
     do_move(std::forward<Matrix>(other));
 }
 
-Matrix& Matrix::operator=(Matrix&& other) noexcept
+template <typename T, int U>
+Matrix<T, U>& Matrix<T, U>::operator=(Matrix&& other) noexcept
 {
-    do_move(std::forward<Matrix>(other));
+    do_move(std::forward<Matrix<T, U>>(other));
     return *this;
 }
 
-void Matrix::get_elements(std::vector<std::tuple<int, int, int>>& elements)
+template <typename T, int U>
+void Matrix<T, U>::get_elements(std::vector<std::tuple<int, int, int>>& elements)
 {
     flush_data_buf();
     for(auto i: *_matrix_data)
@@ -112,7 +114,8 @@ void Matrix::get_elements(std::vector<std::tuple<int, int, int>>& elements)
     }
 }
 
-void Matrix::print_elements()
+template <typename T, int U>
+void Matrix<T, U>::print_elements()
 {
     std::vector<std::tuple<int, int, int>> elements;
     elements.reserve(get_size());
@@ -122,4 +125,3 @@ void Matrix::print_elements()
         std::cout << "X: " << std::get<0>(i) << " Y: " << std::get<1>(i) << " value: " << std::get<2>(i) << std::endl;
     std::cout << "Total number: " << get_size() << std::endl;
 }
-

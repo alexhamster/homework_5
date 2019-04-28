@@ -1,6 +1,7 @@
+
 #define BOOST_TEST_MODULE test_module
 #include <boost/test/unit_test.hpp>
-#include "infinity_matrix.cpp"
+#include "infinity_matrix.h"
 
 #define MATRIX_DEFAULT_VALUE -1
 
@@ -8,7 +9,7 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
 
     BOOST_AUTO_TEST_CASE(correct_value_contain_test_0)
     {
-        Matrix m;
+        Matrix<int, -1> m;
         const size_t range = 100;
         for(size_t i = 0; i < range; i++)
         {
@@ -26,7 +27,7 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
 
     BOOST_AUTO_TEST_CASE(correct_value_contain_test_1)
     {
-        Matrix m;
+        Matrix<int, -1> m;
         const size_t range = 25;
         for(size_t i = 0; i < range; i++)
                 m[i][i] = 3*i;
@@ -48,7 +49,7 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
 
     BOOST_AUTO_TEST_CASE(correct_matrix_size_0)
     {
-        Matrix m;
+        Matrix<int, -1> m;
         const size_t range = 25;
         for(size_t i = 0; i < range; i++)
             m[i][i] = 3*i;
@@ -59,7 +60,7 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
 
     BOOST_AUTO_TEST_CASE(correct_matrix_size_1)
     {
-        Matrix m;
+        Matrix<int, -1> m;
         const size_t range = 25;
         for(size_t i = 0; i < range; i++)
             m[i][i] = 3*i;

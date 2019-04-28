@@ -3,10 +3,11 @@
 
 
 #include "infinity_matrix.h"
+
 int main()
 {
 
-    Matrix m;
+    Matrix<int, 0> m;
 
     for(size_t i = 0; i < 10; i++)
         m[i][i] = i;
@@ -25,6 +26,7 @@ int main()
     std::cout << "Num of busy: " << m.get_size() << std::endl;
 
     m.print_elements();
+
 
     return 0;
 }

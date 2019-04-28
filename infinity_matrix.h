@@ -1,12 +1,9 @@
 #pragma once
-
-#include "infinity_matrix.h"
 #include <map>
 #include <iostream>
 #include <memory>
 #include <cstring>
 #include <vector>
-
 
 #define MATRIX_DEFAULT_VALUE -1
 
@@ -17,7 +14,16 @@ enum Buf
     x, y, value
 };
 
-struct Matrix
+template <typename T>
+struct Buff
+{
+    int x;
+    int y;
+    T value;
+};
+
+template <typename T, int U>
+class Matrix
 {
 
 private:
@@ -79,3 +85,5 @@ public:
     Iterator& operator[] (int x);
 };
 
+
+#include "infinity_matrix.cpp"
