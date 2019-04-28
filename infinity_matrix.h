@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <cstring>
+#include <vector>
 
 
 #define MATRIX_DEFAULT_VALUE -1
@@ -21,12 +22,6 @@ struct Matrix
 
 private:
 
-    class Iterator;
-
-    std::unique_ptr<Iterator> _iterator;
-
-    std::unique_ptr<std::map<map_key, int>> _matrix_data;
-
     class Iterator
     {
 
@@ -42,18 +37,27 @@ private:
         _map(map_) {}
 
         int& operator[](int y);
-
     };
 
     void do_init();
 
-    std::unique_ptr<int[]> _input_buf;
+    void do_move(Matrix &&other) noexcept;
 
-    std::unique_ptr<int[]> _data_buf;
+    void flush_data_buf();
+
+    std::unique_ptr<int[]> _input_buf = nullptr;
+
+    std::unique_ptr<int[]> _data_buf = nullptr;
+
+    std::unique_ptr<Iterator> _iterator = nullptr;
+
+    std::unique_ptr<std::map<map_key, int>> _matrix_data = nullptr;
 
 public:
 
     Matrix();
+
+    ~Matrix() = default;
 
     Matrix(Matrix& other);
 
@@ -63,13 +67,14 @@ public:
 
     Matrix& operator=(Matrix&& other) noexcept;
 
-    void do_move(Matrix &&other) noexcept;
-
-
     size_t get_size() const
     {
         return _matrix_data->size();
     }
+
+    // no const because of flush_data_buf()
+    void get_elements(std::vector<std::tuple<int, int, int>>& elements);
+    void print_elements();
 
     Iterator& operator[] (int x);
 };

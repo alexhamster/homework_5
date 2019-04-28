@@ -75,6 +75,11 @@ Matrix &Matrix::operator=(Matrix &other)
     return *this;
 }
 
+void Matrix::flush_data_buf()
+{
+    operator[](0).operator[](0);
+}
+
 void Matrix::do_move(Matrix &&other) noexcept
 {
     std::swap(_matrix_data, other._matrix_data);
@@ -93,5 +98,28 @@ Matrix& Matrix::operator=(Matrix&& other) noexcept
 {
     do_move(std::forward<Matrix>(other));
     return *this;
+}
+
+void Matrix::get_elements(std::vector<std::tuple<int, int, int>>& elements)
+{
+    flush_data_buf();
+    for(auto i: *_matrix_data)
+    {
+        elements.emplace_back(std::make_tuple(
+                std::get<0>(i.first),
+                std::get<1>(i.first),
+                i.second));
+    }
+}
+
+void Matrix::print_elements()
+{
+    std::vector<std::tuple<int, int, int>> elements;
+    elements.reserve(get_size());
+    get_elements(elements);
+
+    for(auto i: elements)
+        std::cout << "X: " << std::get<0>(i) << " Y: " << std::get<1>(i) << " value: " << std::get<2>(i) << std::endl;
+    std::cout << "Total number: " << get_size() << std::endl;
 }
 

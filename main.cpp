@@ -8,18 +8,23 @@ int main()
 
     Matrix m;
 
-    m[10][10] = 10;
-    m[10][11] = 20;
+    for(size_t i = 0; i < 10; i++)
+        m[i][i] = i;
 
-    Matrix m2;
-    m2 = m;
-    std::cout << m2[10][10] << std::endl;
-    std::cout << m2[10][11] << std::endl;
+    for(size_t i = 0; i < 10; i++)
+        m[9-i][i] = i;
 
-    m[10][11] = 1000000;
 
-    std::cout << m2[10][11] << std::endl;
+    for(size_t i = 1; i < 9; i++)
+    {
+        for(size_t j = 1; j < 9; j++)
+            std::cout << m[i][j] << " ";
+        std::cout << std::endl;
+    }
 
-    std::cout << "Hello, World!" << std::endl;
+    std::cout << "Num of busy: " << m.get_size() << std::endl;
+
+    m.print_elements();
+
     return 0;
 }

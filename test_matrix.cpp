@@ -13,17 +13,13 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
         for(size_t i = 0; i < range; i++)
         {
             for(size_t j = 0; j < range; j++)
-            {
                 m[i][j] = i*j;
-            }
         }
 
         for(size_t i = 0; i < range; i++)
         {
             for(size_t j = 0; j < range; j++)
-            {
                 BOOST_CHECK(m[i][j] == i*j);
-            }
         }
 
     }
@@ -33,14 +29,10 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
         Matrix m;
         const size_t range = 25;
         for(size_t i = 0; i < range; i++)
-        {
                 m[i][i] = 3*i;
-        }
 
         for(size_t i = 0; i < range; i++)
-        {
             m[i][i] = i*i;
-        }
 
         for(size_t i = 0; i < range; i++)
         {
@@ -59,12 +51,24 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
         Matrix m;
         const size_t range = 25;
         for(size_t i = 0; i < range; i++)
-        {
             m[i][i] = 3*i;
-        }
 
         m[0][0]; // need to trigger transfer from buffer to matrix
         BOOST_CHECK(m.get_size() == range);
+    }
+
+    BOOST_AUTO_TEST_CASE(correct_matrix_size_1)
+    {
+        Matrix m;
+        const size_t range = 25;
+        for(size_t i = 0; i < range; i++)
+            m[i][i] = 3*i;
+
+        for(size_t i = 0; i < range; i++)
+            m[i][i] = MATRIX_DEFAULT_VALUE;
+
+        m[0][0]; // need to trigger transfer from buffer to matrix
+        BOOST_CHECK(m.get_size() == 0);
     }
 
 BOOST_AUTO_TEST_SUITE_END()
