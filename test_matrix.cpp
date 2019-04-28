@@ -70,4 +70,75 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
         BOOST_CHECK(m.get_size() == 0);
     }
 
+    BOOST_AUTO_TEST_CASE(object_copying_test_0)
+    {
+        Matrix<int, -1> m;
+
+        m[0][0] = 10;
+        m[1][1] = 20;
+
+        Matrix<int, -1> m2(m);
+
+        BOOST_CHECK(m[0][0] == m2[0][0]);
+        BOOST_CHECK(m[1][1] == m2[1][1]);
+
+        m[0][0] = 100;
+        m[1][1] = 200;
+
+        BOOST_CHECK(m[0][0] != m2[0][0]);
+        BOOST_CHECK(m[1][1] != m2[1][1]);
+
+    }
+
+    BOOST_AUTO_TEST_CASE(object_copying_test_1)
+    {
+        Matrix<int, -1> m;
+
+        m[0][0] = 10;
+        m[1][1] = 20;
+
+        Matrix<int, -1> m2;
+        m2 = m;
+
+        BOOST_CHECK(m[0][0] == m2[0][0]);
+        BOOST_CHECK(m[1][1] == m2[1][1]);
+
+        m[0][0] = 100;
+        m[1][1] = 200;
+
+        BOOST_CHECK(m[0][0] != m2[0][0]);
+        BOOST_CHECK(m[1][1] != m2[1][1]);
+    }
+
+    BOOST_AUTO_TEST_CASE(object_moving_test_0)
+    {
+        Matrix<int, -1> m;
+
+        m[0][0] = 10;
+        m[1][1] = 20;
+
+        Matrix<int, -1> m2(std::move(m));
+
+        BOOST_CHECK(m2[0][0] == 10);
+        BOOST_CHECK(m2[1][1] == 20);
+        m2[1][1] = 20;
+    }
+
+    BOOST_AUTO_TEST_CASE(object_moving_test_1)
+    {
+        Matrix<int, -1> m;
+
+        m[0][0] = 10;
+        m[1][1] = 20;
+
+        Matrix<int, -1> m2;
+        m2 = std::move(m);
+
+        BOOST_CHECK(m2[0][0] == 10);
+        BOOST_CHECK(m2[1][1] == 20);
+        m2[1][1] = 20;
+    }
+
+
+
 BOOST_AUTO_TEST_SUITE_END()
