@@ -35,17 +35,22 @@ int& Matrix<T, U>::Iterator::operator[](int y)
 
     _data_buf->x = _input_buf->x;
     _data_buf->y = _input_buf->y;
-
     return _data_buf->value;
 }
 
 template <typename T, int U>
 void Matrix<T, U>::do_init()
 {
-    _data_buf = std::make_unique<Buff<T>>();
-    _input_buf = std::make_unique<Buff<T>>();
-    _matrix_data = std::make_unique<std::map<map_key, T>>();
-    _iterator  = std::make_unique<Iterator>(_data_buf, _input_buf, _matrix_data.get());
+    try {
+        _data_buf = std::make_unique<Buff<T>>();
+        _input_buf = std::make_unique<Buff<T>>();
+        _matrix_data = std::make_shared<std::map<map_key, T>>();
+        _iterator = std::make_unique<Iterator>(_data_buf, _input_buf, _matrix_data);
+    }
+    catch(std::bad_alloc& e)
+    {
+        std::cout << __FUNCTION__ << e.what() << std::endl;
+    }
 }
 
 template <typename T, int U>

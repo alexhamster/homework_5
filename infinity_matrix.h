@@ -7,13 +7,12 @@
 
 using map_key = std::tuple<int, int>;
 
-
 template <typename T>
 struct Buff
 {
     int x = -1;
     int y = -1;
-    T value = -1;
+    T value;
 };
 
 template <typename T, int U>
@@ -29,9 +28,11 @@ private:
 
         std::shared_ptr<Buff<T>> _data_buf;
         std::shared_ptr<Buff<T>> _input_buf;
-        std::map<map_key, T>* _map;
+        std::shared_ptr<std::map<map_key, T>> _map;
 
-        Iterator(std::shared_ptr<Buff<T>> data_buf_, std::shared_ptr<Buff<T>> input_buf_, std::map<map_key, T>* map_) :
+        Iterator(std::shared_ptr<Buff<T>> data_buf_,
+                std::shared_ptr<Buff<T>> input_buf_,
+                std::shared_ptr<std::map<map_key, T>> map_) :
         _data_buf(data_buf_),
         _input_buf(input_buf_),
         _map(map_) {}
@@ -40,31 +41,21 @@ private:
     };
 
     void do_init();
-
     void do_move(Matrix &&other) noexcept;
-
     void flush_data_buf(); // need to trigger movement from data_buf to matrix_data
 
     std::shared_ptr<Buff<T>> _input_buf = nullptr;
-
     std::shared_ptr<Buff<T>> _data_buf = nullptr;
-
     std::unique_ptr<Iterator> _iterator = nullptr;
-
-    std::unique_ptr<std::map<map_key, T>> _matrix_data = nullptr;
+    std::shared_ptr<std::map<map_key, T>> _matrix_data = nullptr;
 
 public:
 
     Matrix();
-
     ~Matrix() = default;
-
     Matrix(Matrix& other);
-
     Matrix& operator= (Matrix& other);
-
     Matrix(Matrix&& other) noexcept;
-
     Matrix& operator=(Matrix&& other) noexcept;
 
     size_t get_size()
