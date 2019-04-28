@@ -5,8 +5,6 @@
 #include <cstring>
 #include <vector>
 
-#define MATRIX_DEFAULT_VALUE -1
-
 using map_key = std::tuple<int, int>;
 
 enum Buf
@@ -17,9 +15,9 @@ enum Buf
 template <typename T>
 struct Buff
 {
-    int x;
-    int y;
-    T value;
+    int x = -1;
+    int y = -1;
+    T value = -1;
 };
 
 template <typename T, int U>
@@ -33,11 +31,11 @@ private:
 
     public:
 
-        int* _data_buf;
+        Buff<T>* _data_buf;
         int* _input_buf;
         std::map<map_key, int>* _map;
 
-        Iterator(int* data_buf_, int* input_buf_, std::map<map_key, int>* map_) :
+        Iterator(Buff<T>* data_buf_, int* input_buf_, std::map<map_key, int>* map_) :
         _data_buf(data_buf_),
         _input_buf(input_buf_),
         _map(map_) {}
@@ -53,7 +51,7 @@ private:
 
     std::unique_ptr<int[]> _input_buf = nullptr;
 
-    std::unique_ptr<int[]> _data_buf = nullptr;
+    std::unique_ptr<Buff<T>> _data_buf = nullptr;
 
     std::unique_ptr<Iterator> _iterator = nullptr;
 
