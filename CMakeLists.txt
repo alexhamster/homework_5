@@ -12,8 +12,7 @@ add_executable(test_matrix test_matrix.cpp)
 set_target_properties(matrix test_matrix PROPERTIES
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
-        COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra"
-        )
+        COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra")
 
 set_target_properties(test_matrix PROPERTIES
          COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK

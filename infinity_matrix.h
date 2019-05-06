@@ -7,47 +7,43 @@
 
 using map_key = std::tuple<int, int>;
 
-template <typename T>
-struct Buff
+template <typename T, T U>
+struct MatrixCell
 {
     int x = -1;
     int y = -1;
-    T value;
+    T value = U;
+
+    bool is_default()
+    {
+        return value == U;
+    }
 };
 
-template <typename T, int U>
+template <typename T, T U>
 class Matrix
 {
 
 private:
 
-    class Iterator
+    struct Iterator
     {
-
-    public:
-
-        std::shared_ptr<Buff<T>> _data_buf;
-        std::shared_ptr<Buff<T>> _input_buf;
-        std::shared_ptr<std::map<map_key, T>> _map;
-
-        Iterator(std::shared_ptr<Buff<T>> data_buf_,
-                std::shared_ptr<Buff<T>> input_buf_,
-                std::shared_ptr<std::map<map_key, T>> map_) :
-        _data_buf(data_buf_),
-        _input_buf(input_buf_),
-        _map(map_) {}
-
-        int& operator[](int y);
+        Matrix<T,U>* _parent = nullptr;
+        Iterator(Matrix<T,U>* parent_) : _parent(parent_) {}
+        T& operator[](int y);
     };
 
-    void do_init();
-    void do_move(Matrix &&other) noexcept;
-    void flush_data_buf(); // need to trigger movement from data_buf to matrix_data
+    void do_member_init();
+    void do_deep_copy(Matrix &&other) noexcept;
 
-    std::shared_ptr<Buff<T>> _input_buf = nullptr;
-    std::shared_ptr<Buff<T>> _data_buf = nullptr;
+    std::unique_ptr<MatrixCell<T, U>> _requested_cell = nullptr;
+    std::unique_ptr<MatrixCell<T, U>> _uncommitted_cell = nullptr;
     std::unique_ptr<Iterator> _iterator = nullptr;
-    std::shared_ptr<std::map<map_key, T>> _matrix_data = nullptr;
+    std::unique_ptr<std::map<map_key, T>> _matrix_data = nullptr;
+
+    T& get_cell_value();
+    void sync_uncommitted_cell();
+    void rewrite_uncommitted_cell();
 
 public:
 
@@ -60,16 +56,15 @@ public:
 
     size_t get_size()
     {
-        flush_data_buf();
+        sync_uncommitted_cell();
         return _matrix_data->size();
     }
 
-    // no const because of flush_data_buf()
+    // no const because of sync_uncommitted_cell()
     void get_elements(std::vector<std::tuple<int, int, T>>& elements);
     void print_elements();
 
     Iterator& operator[] (int x);
 };
-
 
 #include "infinity_matrix.cpp"
