@@ -34,12 +34,12 @@ private:
     };
 
     void do_member_init();
-    void do_deep_copy(Matrix &&other) noexcept;
+    void do_member_move(Matrix &&other) noexcept;
 
-    std::unique_ptr<MatrixCell<T, U>> _requested_cell = nullptr;
-    std::unique_ptr<MatrixCell<T, U>> _uncommitted_cell = nullptr;
-    std::unique_ptr<Iterator> _iterator = nullptr;
-    std::unique_ptr<std::map<map_key, T>> _matrix_data = nullptr;
+    std::unique_ptr<MatrixCell<T, U>> _requested_cell;
+    std::unique_ptr<MatrixCell<T, U>> _uncommitted_cell;
+    std::unique_ptr<Iterator> _iterator;
+    std::unique_ptr<std::map<map_key, T>> _matrix_data;
 
     T& get_cell_value();
     void sync_uncommitted_cell();

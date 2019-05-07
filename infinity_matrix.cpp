@@ -57,25 +57,25 @@ Matrix<T, U> &Matrix<T, U>::operator=(Matrix<T, U> &other)
 }
 
 template <typename T, T U>
-void Matrix<T, U>::do_deep_copy(Matrix<T, U> &&other) noexcept
+void Matrix<T, U>::do_member_move(Matrix<T, U> &&other) noexcept
 {
-    _matrix_data.swap(other._matrix_data);
-    _uncommitted_cell.swap(other._uncommitted_cell);
-    _requested_cell.swap(other._requested_cell);
-    _iterator.swap(other._iterator);
+    _matrix_data = std::move(other._matrix_data);
+    _uncommitted_cell = std::move(other._uncommitted_cell);
+    _requested_cell = std::move(other._requested_cell);
+    _iterator = std::make_unique<Iterator>(this);
     other.~Matrix();
 }
 
 template <typename T, T U>
 Matrix<T, U>::Matrix(Matrix<T, U>&& other) noexcept
 {
-    do_deep_copy(std::forward<Matrix>(other));
+    do_member_move(std::forward<Matrix<T, U>>(other));
 }
 
 template <typename T, T U>
-Matrix<T, U>& Matrix<T, U>::operator=(Matrix&& other) noexcept
+Matrix<T, U>& Matrix<T, U>::operator=(Matrix<T, U>&& other) noexcept
 {
-    do_deep_copy(std::forward<Matrix<T, U>>(other));
+    do_member_move(std::forward<Matrix<T, U>>(other));
     return *this;
 }
 
