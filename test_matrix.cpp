@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
         for(size_t i = 0; i < range; i++)
         {
             for(size_t j = 0; j < range; j++)
-                BOOST_CHECK(m[i][j] == i*j);
+                BOOST_CHECK(m[i][j] == int(i*j));
         }
 
     }
@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_SUITE(matrix_test_suite)
             for(size_t j = 0; j < range; j++)
             {
                 if(i == j)
-                    BOOST_CHECK(m[i][j] == i*i);
+                    BOOST_CHECK(m[i][j] == int(i*i));
                 else
                     BOOST_CHECK(m[i][j] == 0);
             }

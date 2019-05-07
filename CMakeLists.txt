@@ -9,7 +9,7 @@ add_executable(matrix main.cpp infinity_matrix.h)
 add_executable(test_matrix test_matrix.cpp)
 
 set_target_properties(matrix test_matrix PROPERTIES
-        CXX_STANDARD 17
+        CXX_STANDARD 14
         CXX_STANDARD_REQUIRED ON
         COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra")
 
